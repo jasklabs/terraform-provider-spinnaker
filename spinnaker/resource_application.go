@@ -11,8 +11,9 @@ func resourceApplication() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"application": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validateApplicationName,
 			},
 			"email": {
 				Type:     schema.TypeString,
@@ -81,9 +82,8 @@ func resourceApplicationExists(data *schema.ResourceData, meta interface{}) (boo
 		errmsg := err.Error()
 		if strings.Contains(errmsg, "not found") {
 			return false, nil
-		} else {
-			return false, err
 		}
+		return false, err
 	}
 
 	if app.Name == "" {
